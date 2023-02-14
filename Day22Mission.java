@@ -1,10 +1,12 @@
-//Mission 2
+//Mission 3
 
 
+import java.util.concurrent.*;
 
 public class Day22Mission {
     public static void main(String args[]) {
-          Thread worker = new Thread(()->{
+          ExecutorService exec = Executors.newCachedThreadPool();
+          Runnable woker = ()->{
           for (int i = 0; i <= 4; i++){
               System.out.println("작업 스레드 : " + i);
               try {
@@ -13,13 +15,15 @@ public class Day22Mission {
 
               }
             }
-          });
+          exec.shutdown();
+          };
 
-          worker.start();
+          exec.execute(woker);
+
           int i = 0;
           int alphabet = 'a';
           while (true){
-              if (!worker.isAlive())
+              if (exec.isShutdown())
                   break;
               System.out.println("메인 스레드 : " + (char)(alphabet+i));
               i ++;
